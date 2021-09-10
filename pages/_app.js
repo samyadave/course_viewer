@@ -1,12 +1,22 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import '../styles/globals.scss'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import PageLayout from '../components/PageLayout'
 
-function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }) => {
   return (
-    <PageLayout>
-      <Component {...pageProps} />
-    </PageLayout>
+    <ApolloProvider
+      client={
+        new ApolloClient({
+          uri: 'localhost:3000',
+          cache: new InMemoryCache(),
+        })
+      }
+    >
+      <PageLayout>
+        <Component {...pageProps} />
+      </PageLayout>
+    </ApolloProvider>
   )
 }
 

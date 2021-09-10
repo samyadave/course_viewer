@@ -5,9 +5,9 @@ const server = new ApolloServer({
   typeDefs: gql`
     scalar Date
 
-    input UserInput{
-        username: string
-        email: string
+    input UserInput {
+      username: string
+      email: string
     }
 
     type User {
@@ -28,8 +28,8 @@ const server = new ApolloServer({
       getUsers: [User]
     }
 
-    type Mutation{
-        createUser(UserInput: $UserInput): User
+    type Mutation {
+      createUser: User
     }
   `,
   resolvers: {
