@@ -25,7 +25,7 @@ class ProfessorNotFound(Exception):
     def __init__(self, search_argument, search_parameter: str = "Name"):
 
         # What the client is looking for. Ex: "Professor Pattis"
-        self.search_argument = self.search_argument
+        self.search_argument = search_argument
 
         # The search criteria. Ex: Last Name
         self.search_parameter = search_parameter

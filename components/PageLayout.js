@@ -4,13 +4,19 @@ const PageLayout = ({ children }) => {
   return (
     <>
       <div className="page-header">
-        <Navbar expand="lg">
+        <Navbar bg="dark" expand="lg">
           <Container>
-            <Navbar.Brand href="/">Course Viewer</Navbar.Brand>
+            <Navbar.Brand href="/" style={{ color: 'white' }}>
+              Course Viewer
+            </Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
+                <Nav.Link href="#home" style={{ color: 'white' }}>
+                  Home
+                </Nav.Link>
+                <Nav.Link href="#link" style={{ color: 'white' }}>
+                  Link
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
