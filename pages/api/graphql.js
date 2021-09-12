@@ -1,26 +1,30 @@
-import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServer, gql } from 'apollo-server-micro'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { Kind } from 'graphql'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 const server = new ApolloServer({
   typeDefs: gql`
     scalar Date
 
     input UserInput {
-      username: string
-      email: string
+      username: String
+      email: String
     }
 
     type User {
       id: ID
-      username: string
-      email: string
+      username: String
+      email: String
       createdAt: Date
       isDeleted: Boolean
     }
 
     type Course {
       id: ID
-      title: string
+      title: String
       subscribers: [User]
     }
 
@@ -29,7 +33,7 @@ const server = new ApolloServer({
     }
 
     type Mutation {
-      createUser: User
+      createUser(details: UserInput): User
     }
   `,
   resolvers: {
@@ -49,13 +53,33 @@ const server = new ApolloServer({
         return null // Invalid hard-coded value (not an integer)
       },
     },
-    mutations: {
+    Query: {
+      getUsers: () => {
+        return prisma.user.findMany()
+      },
+    },
+    Mutation: {
       createUser: (_, { details }) => {
-        // await prisma.create.user({
-        //     username: details.username,
-        //     email: details.email
-        // })
+        return prisma.user.create({
+          data: { username: details.username, email: details.email },
+        })
       },
     },
   },
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 })
+
+const startServer = server.start()
+
+export default async function handler(req, res) {
+  await startServer
+  await server.createHandler({
+    path: '/api/graphql',
+  })(req, res)
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
