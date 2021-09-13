@@ -1,9 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server-micro'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { Kind } from 'graphql'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '../../db'
 
 const server = new ApolloServer({
   typeDefs: gql`
