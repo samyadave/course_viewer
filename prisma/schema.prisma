@@ -17,3 +17,16 @@ model User {
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+model Dept {
+  id      Int      @id @default(autoincrement())
+  title   String
+  courses Course[]
+}
+
+model Course {
+  id     Int    @id @default(autoincrement())
+  title  String
+  deptId Int
+  dept   Dept   @relation(fields: [deptId], references: [id])
+}

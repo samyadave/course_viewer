@@ -20,10 +20,17 @@ const server = new ApolloServer({
       isDeleted: Boolean
     }
 
+    type Dept {
+      id: ID
+      title: String
+      course: [Course]
+    }
+
     type Course {
       id: ID
       title: String
-      subscribers: [User]
+      dept: Dept
+      # subscribers: [User]
     }
 
     type Query {
@@ -32,6 +39,7 @@ const server = new ApolloServer({
 
     type Mutation {
       createUser(details: UserInput): User
+      deleteUser(id: ID!): User
     }
   `,
   resolvers: {
@@ -53,13 +61,28 @@ const server = new ApolloServer({
     },
     Query: {
       getUsers: () => {
-        return prisma.user.findMany()
+        return prisma.user.findMany({
+          where: { isDeleted: false },
+        })
       },
     },
+
     Mutation: {
       createUser: (_, { details }) => {
         return prisma.user.create({
-          data: { username: details.username, email: details.email },
+          data: {
+            username: details.username,
+            email: details.email,
+          },
+        })
+      },
+
+      deleteUser: (_, { id }) => {
+        return prisma.user.update({
+          where: { id: parseInt(id) },
+          data: {
+            isDeleted: true,
+          },
         })
       },
     },

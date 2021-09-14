@@ -5,6 +5,7 @@ export const GET_USERS = gql`
     result: getUsers {
       id
       username
+      email
       createdAt
       isDeleted
     }

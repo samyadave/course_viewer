@@ -1,6 +1,9 @@
 {
   "name": "course_viewer",
   "version": "0.1.0",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +15,7 @@
     "@apollo/client": "^3.4.10",
     "@prisma/client": "^3.0.2",
     "apollo-server-micro": "^3.3.0",
+    "axios": "^0.21.4",
     "bootstrap": "5.1.0",
     "graphql": "^15.5.3",
     "micro": "^9.3.4",
