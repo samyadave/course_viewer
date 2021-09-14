@@ -2,16 +2,9 @@ import { Card, Container } from 'react-bootstrap'
 import { useQuery } from '@apollo/client'
 import PageLayout from '../components/PageLayout'
 import { GET_USERS } from '../backend/queries'
-import { getDeAnzaDept } from '../backend/opencourse_api'
 
 const Home = () => {
   const { data, loading } = useQuery(GET_USERS)
-
-  // console.log({ data })
-
-  const deptData = getDeAnzaDept('MATH').then((r) => {
-    return r
-  })
 
   return (
     <PageLayout>
