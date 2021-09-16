@@ -1,32 +1,33 @@
-import { Card, Container } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/dist/client/router'
+
+import { GET_DEPTS } from '../backend/queries'
 import PageLayout from '../components/PageLayout'
-import { GET_USERS } from '../backend/queries'
 
 const Home = () => {
-  const { data, loading } = useQuery(GET_USERS)
+  const router = useRouter()
+  const { data: deptData, loading: deptLoading } = useQuery(GET_DEPTS)
 
   return (
     <PageLayout>
       <Container>
-        <div className="div">
-          <h1>Hello</h1>
-        </div>
-        {/* {deptData?.map((course) => (
-          <div>{course.course}</div>
-        ))} */}
         <div>
-          {loading ? (
-            <div>Loading... </div>
+          {deptLoading ? (
+            <div>Loading...</div>
           ) : (
-            data?.result?.map((user) => (
-              <Card className="card" key={user.id}>
-                <Card.Body>
-                  <Card.Title>{user.username}</Card.Title>
-                  <Card.Subtitle>{user.email}</Card.Subtitle>
-                </Card.Body>
-              </Card>
-            ))
+            <Row xs={1} md={3} className="g-2">
+              {deptData?.result?.map((dept) => (
+                <Col key={dept.id}>
+                  <Card
+                    variant="primary"
+                    onClick={() => router.push(`../depts/${dept.id}`)}
+                  >
+                    {dept.name}
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           )}
         </div>
       </Container>

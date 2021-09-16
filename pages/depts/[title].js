@@ -1,6 +1,7 @@
-import { Card, CardGroup, Container } from 'react-bootstrap'
+import { Col, Container, Row, Button } from 'react-bootstrap'
 import PageLayout from '../../components/PageLayout'
 import axios from 'axios'
+import { useRouter } from 'next/dist/client/router'
 
 //define each possible value of [title] in order to build static paths (not necessary on non-dynamic routes)
 export const getStaticPaths = async () => {
@@ -26,7 +27,10 @@ export const getStaticProps = async (context) => {
   return { props: { courseData, deptData } }
 }
 
-const course = ({ courseData, deptData }) => {
+const DeptPage = ({ courseData, deptData }) => {
+  const router = useRouter()
+  // ${course.dept}-
+
   return (
     <PageLayout>
       <Container>
@@ -34,17 +38,22 @@ const course = ({ courseData, deptData }) => {
           <h1>{deptData.name}</h1>
         </div>
         <div>
-          {courseData?.map((course) => (
-            <CardGroup key={course.course}>
-              <Card>
-                <Card.Title>{course.title}</Card.Title>
-              </Card>
-            </CardGroup>
-          ))}
+          <Row xs={1} md={2} className="g-2">
+            {courseData?.map((course) => (
+              <Col key={course.course}>
+                <Button
+                  variant="primary"
+                  onClick={() => router.push(`../courses/${course.course}`)}
+                >
+                  {course.dept + ' ' + course.course + ' - ' + course.title}
+                </Button>
+              </Col>
+            ))}
+          </Row>
         </div>
       </Container>
     </PageLayout>
   )
 }
 
-export default course
+export default DeptPage

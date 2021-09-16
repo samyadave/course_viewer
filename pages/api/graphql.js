@@ -21,20 +21,50 @@ const server = new ApolloServer({
     }
 
     type Dept {
-      id: ID
-      title: String
-      course: [Course]
+      id: String
+      name: String
+      courses: [Course]
     }
 
     type Course {
-      id: ID
+      id: String
       title: String
+      number: String
+      deptId: String
       dept: Dept
-      # subscribers: [User]
+      classes: [Class]
     }
+
+    type Class {
+      crn: Int
+      professor: String
+      title: String
+      section: String
+      units: Float
+      start: Date
+      end: Date
+      times: [String]
+      courseId: String
+      course: Course
+    }
+
+    # type Professor {
+    #   id: ID
+    #   name: String
+    #   rating: Float
+    #   reviews: [Review]
+    # }
+
+    # type Review {
+    #   id: ID
+    #   title: String
+    #   description: String
+    # }
 
     type Query {
       getUsers: [User]
+      getDepts: [Dept]
+      getDept(id: String!): Dept
     }
 
     type Mutation {
@@ -59,10 +89,37 @@ const server = new ApolloServer({
         return null // Invalid hard-coded value (not an integer)
       },
     },
+    Dept: {
+      courses: async (dept) => {
+        return await prisma.course.findMany({
+          where: { deptId: dept.id },
+        })
+      },
+    },
+    Course: {
+      classes: async (course) => {
+        return await prisma.courseclass.findMany({
+          where: { courseId: course.id },
+        })
+      },
+      dept: async (course) => {
+        return await prisma.dept.findFirst({
+          where: { id: course.deptId },
+        })
+      },
+    },
     Query: {
-      getUsers: () => {
-        return prisma.user.findMany({
+      getUsers: async () => {
+        return await prisma.user.findMany({
           where: { isDeleted: false },
+        })
+      },
+      getDepts: async () => {
+        return await prisma.dept.findMany()
+      },
+      getDept: async (_, { id }) => {
+        return await prisma.dept.findFirst({
+          where: { id: id },
         })
       },
     },

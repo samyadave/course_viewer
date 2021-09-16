@@ -19,14 +19,29 @@ model User {
 }
 
 model Dept {
-  id      Int      @id @default(autoincrement())
-  title   String
+  id      String   @unique
+  name    String
   courses Course[]
 }
 
 model Course {
-  id     Int    @id @default(autoincrement())
-  title  String
-  deptId Int
-  dept   Dept   @relation(fields: [deptId], references: [id])
+  id      String        @unique
+  title   String
+  number  String
+  deptId  String
+  dept    Dept          @relation(fields: [deptId], references: [id])
+  classes Courseclass[]
+}
+
+model Courseclass {
+  crn       Int      @unique
+  professor String
+  title     String
+  section   String
+  units     Float
+  start     DateTime
+  end       DateTime
+  times     String[]
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
 }
